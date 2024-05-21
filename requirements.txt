@@ -1,2 +1,5 @@
 selenium~=4.21.0
 allure-pytest~=2.13.5
+requests~=2.32.1
+pydantic~=2.7.1
+jsonschema~=4.22.0

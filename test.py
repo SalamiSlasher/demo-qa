@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 import pytest
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 
 
 class TestWebsite:
@@ -70,5 +69,4 @@ class TestWebsite:
         search_page_field = self.browser.find_element(By.CSS_SELECTOR, "input[data-test='search-input']")
         assert search_page_field.get_property("value") == "Selenium"
 
-
-# docker run -d --name selenoid-ui --link nostalgic_heyrovsky -p 8080:8080 aerokube/selenoid-ui --selenoid-uri=http://localhost:4444
+# docker run -d --name selenoid-ui --link selenoid -p 8080:8080 aerokube/selenoid-ui --selenoid-uri=http://localhost:4444
