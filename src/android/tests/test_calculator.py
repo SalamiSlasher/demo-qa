@@ -25,6 +25,8 @@ class TestDemoQa:
     def driver_setup(self):
         options = UiAutomator2Options().load_capabilities(capabilities)
         self.driver = webdriver.Remote(appium_url, options=options)
+        self.driver.implicitly_wait(3)
+
         self.calculator_page = CalculatorPage(self.driver)
 
         # Начинаем запись видео
