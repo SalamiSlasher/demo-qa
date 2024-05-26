@@ -50,11 +50,16 @@ class AutomationPracticePage:
     subjects_input_locator = (By.ID, "subjectsInput")
     address_input_locator = (By.ID, "currentAddress")
     gender_input_locator_i = (By.XPATH, "//label[@for='gender-radio-{}']")
-    hobbies_checkbox_locator_i = (By.XPATH, "//div[contains(@class, 'custom-control')][{}]")
+    hobbies_checkbox_locator_i = (
+    By.XPATH, "//div[contains(@class, 'custom-control')][.//*[@id='hobbies-checkbox-{}']]")
     mobile_input_locator = (By.ID, "userNumber")
     submit_btn_locator = (By.ID, "submit")
     birthday_input_locator = (By.XPATH, "//*[@id='dateOfBirthInput']")
     birthdate_day_locator = (By.XPATH, "//div[@aria-label='Choose Monday, May 13th, 2024']")
+    close_btn_locator = (By.ID, "closeLargeModal")
+    success_submit_title = (By.ID, "example-modal-sizes-title-lg")
+    state_locator = (By.ID, "state")
+    upload_file_locator = (By.ID, "uploadPicture")
 
     def __init__(self, driver):
         self.driver: WebDriver = driver
@@ -107,6 +112,9 @@ class AutomationPracticePage:
             ActionChains(self.driver) \
                 .scroll_to_element(el) \
                 .perform()
+            ActionChains(self.driver) \
+                .scroll_by_amount(0, 100) \
+                .perform()
             el.click()
         return self
 
@@ -115,13 +123,32 @@ class AutomationPracticePage:
         submit_btn = WebDriverWait(self.driver, 15).until(
             EC.element_to_be_clickable(self.submit_btn_locator)
         )
-        # ActionChains(self.driver).scroll_to_element(submit_btn).perform()
-        ActionChains(self.driver).scroll_by_amount(0, -10000)
+        ActionChains(self.driver).scroll_to_element(submit_btn).perform()
+        ActionChains(self.driver).scroll_by_amount(0, 1000).perform()
         submit_btn.click()
+        return self
 
     @allure_screenshot_step("Нажать на дату рождения")
     def click_birthdate(self, birthdate: str):
         self.driver.find_element(*self.birthday_input_locator).click()
         self.driver.find_element(*self.birthday_input_locator).clear()
         self.driver.find_element(*self.birthday_input_locator).send_keys(birthdate)
+        return self
+
+    @allure_screenshot_step("Полученние данных с таблицы")
+    def get_submit_matrix(self) -> dict[str, str]:
+        elements = WebDriverWait(self.driver, 5).until(
+            EC.visibility_of_all_elements_located((By.XPATH, '//tr'))
+        )
+
+        d = {}
+        for i in range(1, len(elements)):
+            key, val = [el.text for el in elements[i].find_elements(By.XPATH, 'td')]
+            d[key] = val
+        return d
+
+    @allure_screenshot_step("Загрузка файла")
+    def upload_photo(self, file_path: str):
+        upload_file_el = self.driver.find_element(*self.upload_file_locator)
+        upload_file_el.send_keys(file_path)
         return self

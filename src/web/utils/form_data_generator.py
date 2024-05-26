@@ -1,3 +1,4 @@
+import json
 import random
 
 from faker import Faker
@@ -10,9 +11,8 @@ class RandomFormData:
         self._faker = Faker()
         self._hobbies = []
         self._states_and_cities = {
-            "California": ["Los Angeles", "San Francisco", "San Diego"],
-            "Texas": ["Houston", "Dallas", "Austin"],
-            "New York": ["New York City", "Buffalo", "Rochester"]
+            "NCR": ["Delhi", "Gurgaon", "Noida"],
+            "Uttar Pradesh": ["Agra", "Merrut", "Lucknow"],
         }
 
         self.first_name = self._faker.first_name()
@@ -27,3 +27,19 @@ class RandomFormData:
         self.current_address = self._faker.address()
         self.state = random.choice(list(self._states_and_cities.keys()))
         self.city = random.choice(self._states_and_cities[self.state])
+
+    def to_dict(self):
+        return {
+            "Student Name": f'{self.first_name} {self.last_name}',
+            "Student Email": self.email,
+            "Gender": self.gender.name.capitalize(),
+            "Mobile": self.mobile_phone,
+            # "Date of Birth": self.date_of_birth,
+            "Hobbies": ', '.join([i.name.capitalize() for i in self.hobbies]),
+            # "Address": self.current_address,
+            # "state": self.state,
+            # "city": self.city,
+        }
+
+    def __str__(self):
+        return json.dumps(self.to_dict(), indent=4)

@@ -17,6 +17,8 @@ capabilities = {
     'appium:automationName': 'uiautomator2',
     'deviceName': 'Android',
     'app': get_file_path('Google_Calculator_8.6.apk', __file__),
+    "language": "en",
+    "locale": "US"
 }
 
 
