@@ -4,3 +4,4 @@ requests~=2.32.1
 pydantic~=2.7.1
 jsonschema~=4.22.0
 Appium-Python-Client~=4.0.0
+Faker~=25.2.0

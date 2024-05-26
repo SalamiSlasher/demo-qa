@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 import pytest
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.chrome.service import Service
-from os import getenv
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 from src import base_url
+from src.web.pages.automation_practice_form import AutomationPracticePage
+from src.web.utils.form_data_generator import RandomFormData
 
 
 class TestDemoQa:
@@ -23,21 +23,35 @@ class TestDemoQa:
             chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--window-size=1920,1080")
 
-            self.browser = webdriver.Remote(
+            self.driver: WebDriver = webdriver.Remote(
                 command_executor='http://localhost:4444/wd/hub',
                 options=chrome_options
             )
         else:
-            self.browser = webdriver.Chrome()
+            self.driver: WebDriver = webdriver.Chrome()
 
-        self.browser.maximize_window()
-        self.browser.implicitly_wait(10)
-        self.browser.get(f'{base_url}/automation-practice-form')
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(3)
+        self.driver.get(f'{base_url}/automation-practice-form')
 
         yield
 
-        self.browser.close()
-        self.browser.quit()
+        self.driver.close()
+        self.driver.quit()
 
-    def test_tools_menu(self):
-       print("hello world!")
+    def test_greenway(self):
+        test_data = RandomFormData()
+
+        AutomationPracticePage(self.driver) \
+            .input_first_name(test_data.first_name) \
+            .input_last_name(test_data.last_name) \
+            .input_user_email(test_data.email) \
+            .click_label_gender(test_data.gender) \
+            .input_user_number(test_data.mobile_phone) \
+            .click_hobbies_checkbox(test_data.hobbies) \
+            .input_textarea_current_address(test_data.current_address) \
+            .click_submit_btn()
+
+
+if __name__ == '__main__':
+    pass

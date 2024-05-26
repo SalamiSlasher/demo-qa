@@ -10,7 +10,7 @@ def allure_screenshot_step(step_name):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            driver = args[0].driver
+            driver: WebDriver = args[0].driver
 
             with allure.step(step_name):
                 # Перед выполнением метода
