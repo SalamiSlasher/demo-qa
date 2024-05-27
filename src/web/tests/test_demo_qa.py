@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.chrome.webdriver import WebDriver
 
-from src import base_url
+from src import base_url, use_selenoid, selenoid_url
 from src.web.pages.automation_practice_form import AutomationPracticePage
 from src.web.utils.form_data_generator import RandomFormData
 
@@ -18,14 +18,13 @@ class TestDemoQa:
 
     @pytest.fixture(autouse=True)
     def browser_setup_and_teardown(self):
-        self.use_selenoid = True  # set to True to run tests with Selenoid
-        if self.use_selenoid:
+        if use_selenoid:
             chrome_options = ChromeOptions()
             chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--window-size=1920,1080")
 
             self.driver: WebDriver = webdriver.Remote(
-                command_executor='http://localhost:4444/wd/hub',
+                command_executor=selenoid_url,
                 options=chrome_options
             )
         else:
